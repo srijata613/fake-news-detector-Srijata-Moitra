@@ -265,7 +265,3 @@ fake-news-detector
 This project is intended for **educational and research purposes**.
 
 ---
-git push
-```
-
----
