@@ -18,7 +18,8 @@ app.add_middleware(
 # ---------- Load lightweight TF-IDF model ----------
 print("Loading TF-IDF model...")
 
-vectorizer = joblib.load("backend/model/tfidf_vectorizer.pkl")
+vectorizer = joblib.load("model/tfidf_vectorizer.pkl")
+clf = joblib.load("model/tfidf_logreg_model.pkl")
 tfidf_model = joblib.load("backend/model/tfidf_logreg_model.pkl")
 
 
