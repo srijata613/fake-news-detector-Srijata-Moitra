@@ -1,12 +1,12 @@
 from fastapi import FastAPI
-from pathlib import Path
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 
 app = FastAPI()
 
+# Enable CORS so frontend can access backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -15,29 +15,36 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-MODEL_PATH = BASE_DIR / "model" / "distilbert_fake_news"
+MODEL_NAME = "distilbert-base-uncased"
 
-tokenizer = DistilBertTokenizerFast.from_pretrained("distilbert-base-uncased")
-model = DistilBertForSequenceClassification.from_pretrained(
-    MODEL_PATH
-)
+print("Loading tokenizer...")
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+
+print("Loading model from HuggingFace...")
+model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
+
+# Reduce memory usage
+model.eval()
 
 class NewsRequest(BaseModel):
     text: str
+
 
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
+
 @app.post("/predict")
 def predict(data: NewsRequest):
 
-    if not data.text.strip():
+    text = data.text.strip()
+
+    if not text:
         return {"error": "No text provided"}
 
     inputs = tokenizer(
-        data.text,
+        text,
         return_tensors="pt",
         truncation=True,
         padding=True,
@@ -48,6 +55,7 @@ def predict(data: NewsRequest):
         outputs = model(**inputs)
 
     probs = torch.softmax(outputs.logits, dim=1)
+
     confidence, predicted = torch.max(probs, dim=1)
 
     label = "REAL" if predicted.item() == 1 else "FAKE"
