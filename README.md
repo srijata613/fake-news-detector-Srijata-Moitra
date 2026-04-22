@@ -1,66 +1,267 @@
 # Fake News Detector
 
-A web application that detects whether a news headline or article snippet is **Real or Fake** using a trained Machine Learning model.
+![Python](https://img.shields.io/badge/Python-3.10+-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-API-green)
+![Transformers](https://img.shields.io/badge/HuggingFace-Transformers-yellow)
+![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-red)
+![Machine Learning](https://img.shields.io/badge/Machine-Learning-orange)
+![License](https://img.shields.io/badge/License-Educational-lightgrey)
 
-## Features
+A full-stack **Machine Learning web application** that detects whether a news headline or article snippet is **REAL or FAKE** using Natural Language Processing models.
 
-- DistilBERT Fake News Classification
-- TF-IDF + Logistic Regression baseline
-- FastAPI backend with `/predict` endpoint
-- Interactive frontend UI
-- Dark mode
-- History panel
-- Confidence score visualization
+The system combines a **traditional TF-IDF + Logistic Regression baseline model** with a **fine-tuned DistilBERT transformer model** and exposes predictions through a **FastAPI backend API** with an interactive web interface.
 
-## Tech Stack
+---
 
-Frontend:
-- HTML
-- CSS
-- Vanilla JavaScript
-- Bootstrap
+# Quick Demo
 
-Backend:
-- FastAPI
-- PyTorch
-- HuggingFace Transformers
+Users can paste a news headline or paragraph into the interface and receive an instant prediction with a confidence score.
 
-Machine Learning:
-- ISOT Fake News Dataset
-- TF-IDF
-- Logistic Regression
-- DistilBERT
+---
 
-## Run Backend
+# Features
 
-```bash
-uvicorn backend.app:app --reload
+* Fake news detection using **DistilBERT Transformer**
+* Baseline classifier using **TF-IDF + Logistic Regression**
+* **FastAPI REST API**
+* Interactive **frontend UI**
+* **Confidence score visualization**
+* **Prediction history panel**
+* **Dark mode toggle**
+* **Character and word counter**
+* **Mobile responsive interface**
 
-API:
+---
 
-POST /predict
+# Tech Stack
 
-Example request:
+## Frontend
 
+* HTML
+* CSS
+* Vanilla JavaScript
+* Bootstrap
+
+## Backend
+
+* FastAPI
+* Python
+* PyTorch
+* HuggingFace Transformers
+
+## Machine Learning
+
+* ISOT Fake News Dataset
+* TF-IDF Vectorization
+* Logistic Regression
+* DistilBERT Transformer
+
+---
+
+# System Architecture
+
+```mermaid
+flowchart LR
+
+A[User Input<br>News Headline or Article] --> B[Frontend UI<br>HTML CSS JavaScript]
+
+B --> C[FastAPI Backend API]
+
+C --> D[Text Preprocessing<br>Cleaning & Tokenization]
+
+D --> E[Machine Learning Models]
+
+E --> F[TF-IDF + Logistic Regression]
+E --> G[DistilBERT Transformer]
+
+F --> H[Prediction Result]
+G --> H
+
+H --> I[Confidence Score + Label]
+
+I --> B
+```
+
+---
+
+# Application Screenshots
+
+## User Interface
+
+![User Interface](images/ui.png)
+
+---
+
+## Real News Prediction
+
+![Real News Prediction](images/real_prediction.png)
+
+---
+
+## Fake News Detection
+
+![Fake News Detection](images/fake_prediction.png)
+
+---
+
+## Prediction History
+
+![Prediction History](images/history.png)
+
+---
+
+## FastAPI Documentation
+
+![API Docs](images/api_docs.png)
+
+---
+
+# Dataset
+
+This project uses the **ISOT Fake News Dataset** containing labeled fake and real news articles.
+
+Dataset files:
+
+```
+Fake.csv
+True.csv
+```
+
+---
+
+# Machine Learning Pipeline
+
+1. Load dataset using **Pandas**
+2. Merge real and fake datasets
+3. Assign labels (Fake = 0, Real = 1)
+4. Clean text (lowercase, punctuation removal)
+5. Train/test split (80/20)
+6. TF-IDF vectorization
+7. Train classifiers
+8. Evaluate model performance
+9. Save trained models
+
+---
+
+# Model Performance
+
+Baseline Model: **TF-IDF + Logistic Regression**
+
+| Metric    | Score      |
+| --------- | ---------- |
+| Accuracy  | **98.74%** |
+| Precision | 0.99       |
+| Recall    | 0.99       |
+| F1 Score  | 0.99       |
+
+A **DistilBERT transformer model** is also fine-tuned for contextual language understanding.
+
+---
+
+# API Endpoint
+
+### POST `/predict`
+
+Example request
+
+```json
 {
 "text": "NASA confirms presence of water on Mars"
 }
+```
 
-Example response:
+Example response
 
+```json
 {
 "label": "REAL",
 "confidence": 96.4
 }
+```
 
 ---
 
-![Figure 1: User Interface of the Fake News Detection System]({8A678D71-571A-47D7-B61B-AFDAA5ABF69B}.png)
+# Running the Project
 
-![Figure 2: Prediction output for real news]({66BE494B-6691-4E0E-B87C-F59179A7D3DD}.png)
+## Install dependencies
 
-![Figure 3: Detection of fake news article]({88F8EF62-5999-4C45-ABDC-4114EDE02D1A}.png)
+```
+pip install -r backend/requirements.txt
+```
 
-![Figure 4: Prediction history of recent analyses]({0EE7C7AC-6D27-4E0A-B693-28098B90C1FC}.png)
+---
 
-![Figure 5: FastAPI interactive API documentation]({230A9458-37B3-4648-981A-ABAA7770757E}.png)
+## Start backend server
+
+```
+uvicorn backend.app:app --reload
+```
+
+Server runs at
+
+```
+http://127.0.0.1:8000
+```
+
+API docs
+
+```
+http://127.0.0.1:8000/docs
+```
+
+---
+
+## Launch frontend
+
+Open:
+
+```
+frontend/index.html
+```
+
+in your browser.
+
+---
+
+# Project Structure
+
+```
+fake-news-detector
+│
+├ backend
+│   ├ app.py
+│   ├ train_model.py
+│   └ requirements.txt
+│
+├ frontend
+│   └ index.html
+│
+├ images
+│   ├ ui.png
+│   ├ real_prediction.png
+│   ├ fake_prediction.png
+│   ├ history.png
+│   └ api_docs.png
+│
+├ README.md
+├ .gitignore
+└ Fake_News_Detector.docx
+```
+
+---
+
+# Future Improvements
+
+* URL based news article extraction
+* Multilingual fake news detection
+* Explainable AI visualizations
+* Docker deployment
+* Real time news monitoring
+
+---
+
+# License
+
+This project is intended for **educational and research purposes**.
+
+---
