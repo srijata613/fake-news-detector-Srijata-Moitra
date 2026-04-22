@@ -112,7 +112,8 @@ border-bottom:1px solid #444;
 
 <script>
 
-const apiURL = "http://127.0.0.1:8000/predict";
+/* CHANGE THIS WHEN BACKEND IS DEPLOYED */
+const apiURL = "https://fake-news-detector.onrender.com/predict";
 
 let historyList = [];
 
@@ -124,34 +125,27 @@ const text = textarea.value;
 
 document.getElementById("charCount").innerText = text.length;
 
-document.getElementById("wordCount").innerText = text.trim()=="" ? 0 : text.trim().split(/\s+/).length;
+document.getElementById("wordCount").innerText =
+text.trim()=="" ? 0 : text.trim().split(/\s+/).length;
 
 });
 
 function toggleDarkMode(){
-
 document.body.classList.toggle("dark-mode");
-
 }
 
 async function detectNews(){
 
 const text = textarea.value.trim();
-
 const spinner = document.getElementById("spinner");
-
 const resultCard = document.getElementById("resultCard");
 
 if(text===""){
-
 alert("Please enter some text.");
-
 return;
-
 }
 
 resultCard.classList.remove("show");
-
 spinner.style.display="block";
 
 try{
@@ -178,7 +172,7 @@ addHistory(text,data);
 
 spinner.style.display="none";
 
-alert("Server unreachable. Please check if backend is running.");
+alert("Server unreachable. Please check backend deployment.");
 
 }
 
@@ -189,7 +183,6 @@ function displayResult(data){
 const resultCard = document.getElementById("resultCard");
 
 const label = data.label;
-
 const confidence = data.confidence;
 
 resultCard.className="card result-card mt-4 p-3 text-center";
