@@ -13,9 +13,13 @@ The system combines a **traditional TF-IDF + Logistic Regression baseline model*
 
 ---
 
-# Quick Demo
+## Live Demo
 
-Users can paste a news headline or paragraph into the interface and receive an instant prediction with a confidence score.
+Frontend:
+https://fake-news-detector-srijata-moitra.vercel.app
+
+API:
+https://fake-news-detector-srijata-moitra.onrender.com
 
 ---
 
