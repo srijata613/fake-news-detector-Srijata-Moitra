@@ -1,8 +1,4 @@
 fastapi
 uvicorn
-transformers
-torch
-pydantic
 scikit-learn
-pandas
 joblib

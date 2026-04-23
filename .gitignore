@@ -3,7 +3,9 @@ __pycache__/
 *.pyc
 
 data/
-model/
+
+model/distilbert_fake_news/
+model/bert_output/
 
 *.zip
 *.log
