@@ -34,7 +34,7 @@ def predict(data: NewsRequest):
     prediction = model.predict(text_vec)[0]
     prob = model.predict_proba(text_vec)[0].max()
 
-    label = "REAL" if prediction == 1 else "FAKE"
+    label = "FAKE" if prediction == 1 else "REAL"
 
     return {
         "label": label,
