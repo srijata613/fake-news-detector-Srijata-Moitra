@@ -26,6 +26,34 @@ vectorizer = joblib.load(MODEL_DIR / "tfidf_vectorizer.pkl")
 model = joblib.load(MODEL_DIR / "tfidf_logreg_model.pkl")
 
 
+REAL_PATTERNS = [
+    r"\b(reuters|cnn|nyt|bbc|associated press|ap news)\b",
+    r"\b(pentagon|white house|supreme court|senator|congress)\b",
+    r"\b(said|announced|according to|reported)\b",
+]
+
+FAKE_PATTERNS = [
+    r"\b(secret|shocking|insane|miracle|disturbing)\b",
+    r"\b(will make you sick|what happens next)\b",
+    r"\b(conspiracy|exposed|they don't want you to know)\b",
+]
+
+
+def rule_based_check(text):
+
+    t = text.lower()
+
+    for p in REAL_PATTERNS:
+        if re.search(p, t):
+            return "REAL", 0.75
+
+    for p in FAKE_PATTERNS:
+        if re.search(p, t):
+            return "FAKE", 0.85
+
+    return None
+
+
 #  Request Schema 
 class NewsRequest(BaseModel):
     text: str
@@ -55,22 +83,34 @@ def root():
 @app.post("/predict")
 def predict(data: NewsRequest):
 
-    if not data.text.strip():
+    text = data.text.strip()
+
+    if not text:
         return {"error": "No text provided"}
 
-    # Clean text before vectorization
-    cleaned_text = clean_text(data.text)
+    # RULE LAYER FIRST
+    rule_result = rule_based_check(text)
+    if rule_result:
+        label, conf = rule_result
+        return {
+            "label": label,
+            "confidence": round(conf*100,2)
+        }
 
-    text_vec = vectorizer.transform([cleaned_text])
-
-    prediction = model.predict(text_vec)[0]
-
+    # ML MODEL
+    cleaned = clean_text(text)
+    text_vec = vectorizer.transform([cleaned])
+    
+    pred = model.predict(text_vec)[0]
     prob = model.predict_proba(text_vec)[0].max()
-
-    # Correct mapping
-    label = "REAL" if prediction == 1 else "FAKE"
+    
+    label = "REAL" if pred == 1 else "FAKE"
+    
+    # confidence guard
+    if prob < 0.60:
+        label = "UNCERTAIN"
 
     return {
         "label": label,
-        "confidence": round(prob * 100, 2)
+        "confidence": round(prob*100,2)
     }
