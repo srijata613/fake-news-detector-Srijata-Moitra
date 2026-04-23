@@ -153,10 +153,10 @@ Baseline Model: **TF-IDF + Logistic Regression**
 
 | Metric    | Score      |
 | --------- | ---------- |
-| Accuracy  | **98.74%** |
-| Precision | 0.99       |
-| Recall    | 0.99       |
-| F1 Score  | 0.99       |
+| Accuracy  | **97.51%** |
+| Precision | 0.98       |
+| Recall    | 0.97       |
+| F1 Score  | 0.98       |
 
 A **DistilBERT transformer model** is also fine-tuned for contextual language understanding.
 
